@@ -16,4 +16,4 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run moonpos.py
-      run: python moonpos.py --when "2022-01-01 00:00:00"
+      run: python moonpos.py --when "2022-01-01 00:00:00" --latitude "0.0" --longitude "0.0"
