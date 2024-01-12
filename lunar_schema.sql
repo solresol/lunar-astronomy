@@ -10,5 +10,6 @@ CREATE VIEW moon_positions_rounded_off AS
    FROM moon_position GROUP BY 1;
 
 CREATE VIEW missing_moonpositions AS
- SELECT when_recorded_rounded FROM moon_positions_rounded_off
+ SELECT production_rounded_off.when_recorded_rounded 
+   FROM production_rounded_off
   WHERE when_recorded_rounded NOT IN (SELECT when_recorded_rounded FROM moon_positions_rounded_off);
