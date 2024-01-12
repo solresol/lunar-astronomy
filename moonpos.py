@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 import ephem
 
@@ -13,9 +14,9 @@ def calculate_moon_position_and_phase(date_time, latitude, longitude):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--when', required=True, help='ISO formatted date and time')
-    parser.add_argument('--latitude', required=True, help='Observers latitude')
-    parser.add_argument('--longitude', required=True, help='Observers longitude')
+    parser.add_argument('--when', default=datetime.datetime.now().isoformat(), help='ISO formatted date and time')
+    parser.add_argument('--latitude', default='-33.7580', help='Observers latitude')
+    parser.add_argument('--longitude', default='151.0582', help='Observers longitude')
     args = parser.parse_args()
 
     alt, az, phase = calculate_moon_position_and_phase(args.when, args.latitude, args.longitude)
