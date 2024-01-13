@@ -56,6 +56,7 @@ def check_config_file_exists(config_file):
 
 def main():
     args = parse_arguments()
+    check_config_file_exists(args.postgresql_database_config)
     pg_conn = connect_postgresql(args.postgresql_database_config)
     sqlite_conn = connect_sqlite(args.sqlite_database)
     data = query_postgresql(pg_conn, args.start_timestamp, args.end_timestamp)
