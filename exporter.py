@@ -35,7 +35,7 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
         SELECT when_recorded, clouds FROM weather WHERE when_recorded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
         SELECT when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude
         FROM production_rounded_off
-        JOIN sun_positions ON production_rounded_off.when_recorded_rounded = sun_positions.when_recorded_rounded
+        JOIN sun_position ON production_rounded_off.when_recorded_rounded = sun_position.when_recorded_rounded
         JOIN moon_positions ON production_rounded_off.when_recorded_rounded = moon_positions.when_recorded_rounded
         WHERE when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
     """)
