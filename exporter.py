@@ -33,11 +33,11 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
     cursor = conn.cursor()
     cursor.execute(f"""
         SELECT when_recorded, clouds FROM weather WHERE when_recorded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
-        SELECT when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude
-        FROM production_rounded_off
-        JOIN sun_position ON production_rounded_off.when_recorded_rounded = sun_position.when_recorded_rounded
-        JOIN moon_positions ON production_rounded_off.when_recorded_rounded = moon_positions.when_recorded_rounded
-        WHERE when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
+        SELECT pr.when_recorded_rounded, pr.watts, mp.moon_azimuth, mp.moon_altitude, mp.moon_phase, sp.azimuth, sp.elevation
+    FROM production_rounded_off pr
+    JOIN sun_position sp ON pr.when_recorded_rounded = date_trunc('hour', sp.when_recorded) + interval '5 min' * round(date_part('minute', sp.when_recorded) / 5.0)
+    JOIN moon_positions mp ON pr.when_recorded_rounded = date_trunc('hour', mp.when_recorded) + interval '5 min' * round(date_part('minute', mp.when_recorded) / 5.0)
+    WHERE pr.when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
     """)
     return cursor.fetchall()
 
