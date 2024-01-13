@@ -11,6 +11,7 @@ parser.add_argument("--config", default='config.ini')
 parser.add_argument("--progress", action="store_true")
 parser.add_argument("--skip-refresh", action="store_true",
                     help="Skip running a time-consuming refresh materialized view for electricity production data")
+parser.add_argument("--limit", type=int, help="Only do this many")
 args = parser.parse_args()
 
 c = configparser.ConfigParser()
@@ -30,7 +31,11 @@ if not args.skip_refresh:
     write_cursor.execute("refresh materialized view production_rounded_off")
     conn.commit()
 
-read_cursor.execute("select when_recorded_rounded AT TIME ZONE 'gmt' as gmt_when, when_recorded_rounded from missing_moonpositions order by 1")
+query = "select when_recorded_rounded AT TIME ZONE 'gmt' as gmt_when, when_recorded_rounded from missing_moonpositions order by 1"
+if args.limit:
+    query += f" limit {args.limit}"
+
+read_cursor.execute(query)
 
 location = (float(latitude), float(longitude))
 iterator = read_cursor
