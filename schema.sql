@@ -1,3 +1,35 @@
+create table raw_blob ( blob json );
+
+create view consumption as
+ select
+  to_timestamp(cast(blob->'consumption'->0->>'readingTime' as bigint)) as when_recorded,
+  cast(blob->'consumption'->0->>'wNow' as float) as watts
+ from raw_blob;
+
+create view production as
+ select
+  to_timestamp(cast(blob->'production'->1->>'readingTime' as bigint)) as when_recorded,
+  cast(blob->'production'->1->>'wNow' as float) as watts
+ from raw_blob;
+
+create index on raw_blob (to_timestamp(cast(blob->'production'->1->>'readingTime' as bigint)));
+create index on raw_blob (to_timestamp(cast(blob->'consumption'->0->>'readingTime' as bigint)));
+
+
+create view current_consumption as
+ select watts from consumption order by when_recorded desc limit 1;
+
+create view current_production as
+ select watts from production order by when_recorded desc limit 1;
+
+
+
+grant insert on raw_blob to _mrtg;
+grant select on production to _mrtg;
+grant select on consumption to _mrtg;
+
+grant select on current_production to _mrtg;
+grant select on current_consumption to _mrtg;
 create table sun_position (
    when_recorded timestamp with time zone default current_timestamp primary key,
    azimuth float,
