@@ -1,6 +1,7 @@
 import argparse
 import configparser
 import sqlite3
+import datetime
 
 import psycopg2
 
@@ -8,8 +9,8 @@ import psycopg2
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--postgresql-database-config")
-    parser.add_argument("--start-timestamp")
-    parser.add_argument("--end-timestamp")
+    parser.add_argument("--start-timestamp", default='1970-01-01 00:00:00')
+    parser.add_argument("--end-timestamp", default='2025-01-12 05:59:49')
     parser.add_argument("--sqlite-database")
     return parser.parse_args()
 
