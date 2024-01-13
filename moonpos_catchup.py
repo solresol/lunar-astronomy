@@ -46,7 +46,7 @@ for row in iterator:
     gmt_when = row[0]
     when_recorded = row[1]
     altitude, azimuth, phase = calculate_moon_position_and_phase(
-        (gmt_when.year, gmt_when.month, gmt_when.day, gmt_when.hour, gmt_when.minute, gmt_when.second, 0),
-        location)
+        (gmt_when.year, gmt_when.month, gmt_when.day, gmt_when.hour, gmt_when.minute, gmt_when.second),
+        location[0], location[1])
     write_cursor.execute("insert into moon_position (when_recorded, altitude, azimuth, phase) values (%s, %s, %s, %s)", [when_recorded, altitude, azimuth, phase])
     conn.commit()
