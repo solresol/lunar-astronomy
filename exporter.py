@@ -86,11 +86,23 @@ def check_config_file_exists(config_file):
         sys.exit(1)
 
 def write_astronomy_csv(astronomy_data, csv_path):
-    raise NotImplementedError("Function 'write_astronomy_csv' not implemented yet")
+    import csv
+    headers = ['when_recorded_rounded', 'watts', 'moon_azimuth', 'moon_altitude', 'moon_phase', 'sun_azimuth', 'sun_elevation']
+    with open(csv_path, 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(headers)
+        for row in astronomy_data:
+            csvwriter.writerow(row)
 
 
 def write_weather_csv(weather_data, csv_path):
-    raise NotImplementedError("Function 'write_weather_csv' not implemented yet")
+    import csv
+    headers = ['when_recorded', 'clouds']
+    with open(csv_path, 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(headers)
+        for row in weather_data:
+            csvwriter.writerow(row)
 
 def main():
     args = parse_arguments()
