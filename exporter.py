@@ -52,10 +52,11 @@ def write_sqlite(conn, data):
     CREATE TABLE IF NOT EXISTS weather (
         when_recorded TIMESTAMP,
         clouds FLOAT
-    );
-    DELETE FROM weather;
-    conn.commit()
+    )
     """)
+    conn.commit()
+    cursor.execute("DELETE FROM weather")
+    conn.commit()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS astronomy (
         when_recorded_rounded TIMESTAMP,
@@ -65,10 +66,11 @@ def write_sqlite(conn, data):
         moon_phase FLOAT,
         sun_azimuth FLOAT,
         sun_altitude FLOAT
-    );
-    DELETE FROM astronomy;
-    conn.commit()
+    )
     """)
+    conn.commit()
+    cursor.execute("DELETE FROM astronomy")
+    conn.commit()
     for record in data:
         cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", (record[0], record[1]))
         conn.commit()
