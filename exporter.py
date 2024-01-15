@@ -49,6 +49,7 @@ def write_sqlite(conn, data):
         clouds FLOAT
     );
     DELETE FROM weather;
+    conn.commit()
     """)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS astronomy (
@@ -61,12 +62,13 @@ def write_sqlite(conn, data):
         sun_altitude FLOAT
     );
     DELETE FROM astronomy;
-    """)
-    cursor.executemany("""
-        INSERT INTO weather (when_recorded, clouds) VALUES (?, ?);
-        INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?);
-    """, data)
     conn.commit()
+    """)
+    for record in data:
+        cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", (record[0], record[1]))
+        conn.commit()
+        cursor.execute("INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?)", record[2:])
+        conn.commit()
 
 def check_config_file_exists(config_file):
     if not os.path.isfile(config_file):
