@@ -32,13 +32,18 @@ def connect_sqlite(database):
 def query_postgresql(conn, start_timestamp, end_timestamp):
     cursor = conn.cursor()
     cursor.execute(f"""
-        SELECT when_recorded, clouds FROM weather WHERE when_recorded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
-        SELECT pr.when_recorded_rounded, pr.watts, mp.azimuth, mp.altitude, mp.phase, sp.azimuth, sp.elevation
-    FROM production_rounded_off pr
-    JOIN sun_position sp ON pr.when_recorded_rounded = sp.when_recorded
-    JOIN moon_position mp ON pr.when_recorded_rounded = mp.when_recorded
-    WHERE pr.when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
+        SELECT when_recorded, clouds FROM weather WHERE when_recorded BETWEEN '{start_timestamp}' AND '{end_timestamp}'
     """)
+    weather_data = cursor.fetchall()
+
+    cursor.execute(f"""
+        SELECT pr.when_recorded_rounded, pr.watts, mp.azimuth, mp.altitude, mp.phase, sp.azimuth, sp.elevation
+        FROM production_rounded_off pr
+        JOIN sun_position sp ON pr.when_recorded_rounded = sp.when_recorded
+        JOIN moon_position mp ON pr.when_recorded_rounded = mp.when_recorded
+        WHERE pr.when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}'
+    """)
+    astronomy_data = cursor.fetchall()
     return cursor.fetchall()
 
 def write_sqlite(conn, data):
