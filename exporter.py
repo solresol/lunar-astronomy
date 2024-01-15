@@ -85,13 +85,21 @@ def check_config_file_exists(config_file):
         print("Error: PostgreSQL database configuration file does not exist.")
         sys.exit(1)
 
+def write_astronomy_csv(astronomy_data, csv_path):
+    raise NotImplementedError("Function 'write_astronomy_csv' not implemented yet")
+
+
+def write_weather_csv(weather_data, csv_path):
+    raise NotImplementedError("Function 'write_weather_csv' not implemented yet")
+
 def main():
     args = parse_arguments()
     check_config_file_exists(args.postgresql_database_config)
     pg_conn = connect_postgresql(args.postgresql_database_config)
-    sqlite_conn = connect_sqlite(args.sqlite_database)
-    data = query_postgresql(pg_conn, args.start_timestamp, args.end_timestamp)
-    write_sqlite(sqlite_conn, data)
+    weather_data, astronomy_data = query_postgresql(pg_conn, args.start_timestamp, args.end_timestamp)
+    if args.sqlite_database:
+        sqlite_conn = connect_sqlite(args.sqlite_database)
+        write_sqlite(sqlite_conn, (weather_data, astronomy_data))
 
 if __name__ == "__main__":
     main()
