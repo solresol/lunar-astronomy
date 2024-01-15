@@ -12,7 +12,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--postgresql-database-config", default='config.ini', help="Path to the PostgreSQL database configuration file")
     parser.add_argument("--start-timestamp", default='1970-01-01 00:00:00', help="Start timestamp for querying the PostgreSQL database (format: YYYY-MM-DD HH:MM:SS)")
-    parser.add_argument("--end-timestamp", default='2025-01-12 05:59:49', help="End timestamp for querying the PostgreSQL database (format: YYYY-MM-DD HH:MM:SS)")
+    default_end_timestamp = datetime.datetime.now() + datetime.timedelta(days=365)
+    parser.add_argument("--end-timestamp", default=default_end_timestamp.strftime('%Y-%m-%d %H:%M:%S'), help="End timestamp for querying the PostgreSQL database (format: YYYY-MM-DD HH:MM:SS)")
     parser.add_argument("--sqlite-database", help="Path to the SQLite database file where the data will be exported")
     return parser.parse_args()
 
