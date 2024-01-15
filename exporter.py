@@ -36,7 +36,7 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
         SELECT pr.when_recorded_rounded, pr.watts, mp.moon_azimuth, mp.moon_altitude, mp.moon_phase, sp.azimuth, sp.elevation
     FROM production_rounded_off pr
     JOIN sun_position sp ON pr.when_recorded_rounded = sp.when_recorded
-    JOIN moon_positions mp ON pr.when_recorded_rounded = mp.when_recorded
+    JOIN moon_position mp ON pr.when_recorded_rounded = mp.when_recorded
     WHERE pr.when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}';
     """)
     return cursor.fetchall()
