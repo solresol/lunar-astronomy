@@ -14,6 +14,8 @@ def parse_arguments():
     parser.add_argument("--start-timestamp", default='1970-01-01 00:00:00', help="Start timestamp for querying the PostgreSQL database (format: YYYY-MM-DD HH:MM:SS)")
     default_end_timestamp = datetime.datetime.now() + datetime.timedelta(days=365)
     parser.add_argument("--end-timestamp", default=default_end_timestamp.strftime('%Y-%m-%d %H:%M:%S'), help="End timestamp for querying the PostgreSQL database (format: YYYY-MM-DD HH:MM:SS)")
+    parser.add_argument("--astronomy-csv", default=None, help="Path to the CSV file where astronomy data will be saved")
+    parser.add_argument("--weather-csv", default=None, help="Path to the CSV file where weather data will be saved")
     parser.add_argument("--sqlite-database", help="Path to the SQLite database file where the data will be exported")
     return parser.parse_args()
 
