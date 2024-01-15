@@ -43,6 +43,25 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
 
 def write_sqlite(conn, data):
     cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS weather (
+        when_recorded TIMESTAMP,
+        clouds FLOAT
+    );
+    DELETE FROM weather;
+    """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS astronomy (
+        when_recorded_rounded TIMESTAMP,
+        watts FLOAT,
+        moon_azimuth FLOAT,
+        moon_altitude FLOAT,
+        moon_phase FLOAT,
+        sun_azimuth FLOAT,
+        sun_altitude FLOAT
+    );
+    DELETE FROM astronomy;
+    """)
     cursor.executemany("""
         INSERT INTO weather (when_recorded, clouds) VALUES (?, ?);
         INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?);
