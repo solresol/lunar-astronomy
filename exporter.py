@@ -74,12 +74,15 @@ def write_sqlite(conn, weather_data, astronomy_data):
     conn.commit()
     cursor.execute("DELETE FROM astronomy")
     conn.commit()
-    for record in weather_data:
+    for i, record in enumerate(weather_data):
         cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", record)
-        conn.commit()
-    for record in astronomy_data:
+        if i % 1000 == 0:
+            conn.commit()
+    for i, record in enumerate(astronomy_data):
         cursor.execute("INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?)", record)
-        conn.commit()
+        if i % 1000 == 0:
+            conn.commit()
+    conn.commit()
 
 def check_config_file_exists(config_file):
     if not os.path.isfile(config_file):
