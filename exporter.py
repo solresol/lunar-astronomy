@@ -47,9 +47,9 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
         WHERE pr.when_recorded_rounded BETWEEN '{start_timestamp}' AND '{end_timestamp}'
     """)
     astronomy_data = cursor.fetchall()
-    return cursor.fetchall()
+    return weather_data, astronomy_data
 
-def write_sqlite(conn, data):
+def write_sqlite(conn, weather_data, astronomy_data):
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS weather (
@@ -74,10 +74,11 @@ def write_sqlite(conn, data):
     conn.commit()
     cursor.execute("DELETE FROM astronomy")
     conn.commit()
-    for record in data:
-        cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", (record[0], record[1]))
+    for record in weather_data:
+        cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", record)
         conn.commit()
-        cursor.execute("INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?)", record[2:])
+    for record in astronomy_data:
+        cursor.execute("INSERT INTO astronomy (when_recorded_rounded, watts, moon_azimuth, moon_altitude, moon_phase, sun_azimuth, sun_altitude) VALUES (?, ?, ?, ?, ?, ?, ?)", record)
         conn.commit()
 
 def check_config_file_exists(config_file):
@@ -111,7 +112,11 @@ def main():
     weather_data, astronomy_data = query_postgresql(pg_conn, args.start_timestamp, args.end_timestamp)
     if args.sqlite_database:
         sqlite_conn = connect_sqlite(args.sqlite_database)
-        write_sqlite(sqlite_conn, (weather_data, astronomy_data))
+        write_sqlite(sqlite_conn, weather_data, astronomy_data)
+    if args.weather_csv:
+        write_weather_csv(weather_data, args.weather_csv)
+    if args.astronomy_csv:
+        write_astronomy_csv(astronomy_data, args.astronomy_csv)
 
 if __name__ == "__main__":
     main()
