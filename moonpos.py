@@ -14,7 +14,7 @@ def calculate_moon_position_and_phase(date_time, latitude, longitude):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--when', default=datetime.datetime.now().isoformat(), help='ISO formatted date and time')
+    parser.add_argument('--when', default=datetime.datetime.now(), help='ISO formatted date and time without microseconds')
     parser.add_argument('--latitude', default='-33.7580', help='Observers latitude')
     parser.add_argument('--longitude', default='151.0582', help='Observers longitude')
     args = parser.parse_args()
