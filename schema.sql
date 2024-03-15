@@ -75,6 +75,8 @@ create table weather (
 create view current_weather as
  select * from weather order by when_recorded desc limit 1;
 
+create table weather_fetch_failures (failure_time timestamp default current_timestamp);
+
 ----------------------------------------------------------------------
 
 create materialized view production_rounded_off as
