@@ -75,7 +75,7 @@ def write_sqlite(conn, weather_data, astronomy_data):
     cursor.execute("DELETE FROM astronomy")
     conn.commit()
     for i, record in enumerate(weather_data):
-        cursor.execute("INSERT INTO weather (when_recorded, clouds) VALUES (?, ?)", record)
+        cursor.execute("INSERT INTO weather_data (when_recorded, clouds) VALUES (?, ?)", record)
         if i % 1000 == 0:
             conn.commit()
     for i, record in enumerate(astronomy_data):
