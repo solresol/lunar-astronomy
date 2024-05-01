@@ -54,7 +54,7 @@ create table moon_position (
    phase float
 );
 
-create table weather (
+create table weather_data (
    when_recorded timestamp with time zone default current_timestamp primary key,
    weather_main varchar,
    description varchar,
@@ -72,10 +72,10 @@ create table weather (
    sunset_tstamp timestamp with time zone generated always as (to_timestamp(sunset)) stored
 );
 
-create view current_weather as
- select * from weather order by when_recorded desc limit 1;
+create view current_weather_data as
+ select * from weather_data order by when_recorded desc limit 1;
 
-create table weather_fetch_failures (failure_time timestamp default current_timestamp);
+create table weather_data_fetch_failures (failure_time timestamp default current_timestamp);
 
 ----------------------------------------------------------------------
 
