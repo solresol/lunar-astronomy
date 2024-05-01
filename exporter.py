@@ -52,13 +52,13 @@ def query_postgresql(conn, start_timestamp, end_timestamp):
 def write_sqlite(conn, weather_data, astronomy_data):
     cursor = conn.cursor()
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS weather (
+    CREATE TABLE IF NOT EXISTS weather_data (
         when_recorded TIMESTAMP,
         clouds FLOAT
     )
     """)
     conn.commit()
-    cursor.execute("DELETE FROM weather")
+    cursor.execute("DELETE FROM weather_data")
     conn.commit()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS astronomy (
